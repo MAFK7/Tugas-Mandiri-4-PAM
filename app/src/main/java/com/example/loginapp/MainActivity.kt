@@ -2,51 +2,49 @@ package com.example.loginapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
+import androidx.appcompat.app.AppCompatDelegate
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
 
-        val username =
-            findViewById<EditText>(R.id.edit_username)
+        val etUsername = findViewById<TextInputEditText>(R.id.etUsername)
+        val etPassword = findViewById<TextInputEditText>(R.id.etPassword)
+        val btnLogin = findViewById<MaterialButton>(R.id.btnLogin)
+        val tvForgot = findViewById<TextView>(R.id.tvForgot)
 
-        val password =
-            findViewById<EditText>(R.id.edit_password)
+        tvForgot.setOnClickListener {
+            Toast.makeText(this, "Fitur lupa password belum tersedia", Toast.LENGTH_SHORT).show()
+        }
 
-        val buttonLogin =
-            findViewById<Button>(R.id.button_login)
+        btnLogin.setOnClickListener {
+            val username = etUsername.text.toString().trim()
+            val password = etPassword.text.toString()
 
-        buttonLogin.setOnClickListener {
+            if (username.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Username dan password wajib diisi", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-            val usernameInput =
-                username.text.toString()
+            val usernameBenar = username == "asd" ||
+                    username == "saddd@gmail.com"
+            val passwordBenar = password == "11111"
 
-            val passwordInput =
-                password.text.toString()
-
-            if (usernameInput == "admin" &&
-                passwordInput == "1111"
-            ) {
-
-                val intent =
-                    Intent(this, HomeActivity::class.java)
-
+            if (usernameBenar && passwordBenar) {
+                // Intent: pindah dari halaman login ke halaman profil
+                val intent = Intent(this, ProfileActivity::class.java)
                 startActivity(intent)
-
+                finish() // tutup halaman login supaya tombol back tidak kembali ke login
             } else {
-
-                Toast.makeText(
-                    this,
-                    "Username atau password salah",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this, "Username atau password salah", Toast.LENGTH_SHORT).show()
             }
         }
     }
